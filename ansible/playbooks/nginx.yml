@@ -1,0 +1,25 @@
+---
+- name: Set up nginx
+  hosts: nginx
+  become: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+    
+    - name: Copy nginx.conf
+      copy:
+        src: ../files/nginx/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        mode: '0644'
+
+    - name: Restart Nginx
+      become: true
+      service:
+        name: nginx
+        state: restarted
